@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form onsubmit>
+        <input type="text" name="firstName" placeholder="First Name" onkeyup="validationFirstName">
+        <input type="text" name="lastName" placeholder="Last Name">
+        <input type="text" name="age" placeholder="Age">
+        <input type="password" name="password" placeholder="Password">
+        <input type="email" name="email" placeholder="Email">
+    </form>
+    <script>
+        var nameLength = document.getElementsByName('firstName');
+        
+        function validationFirstName(){
+            if (nameLength.length > 20 || ){
+                window.alert("No puede superar los 20 caracteres");
+            }
+        }
+
+    </script>
+</body>
+</html>
