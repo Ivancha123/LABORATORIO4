@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP5</title>
+</head>
+<body>
+    <script>
+        function loadApi(url){
+            return new Promise(function(resolve,reject){
+                var request = new XMLHttpRequest();
+                request.open('GET',url)
+                request.responseType = 'json';
+                request.onload = function (){
+                    if(request.status == 200){
+                        resolve(request.response);
+                    }
+                    else{
+                        reject(Error('Json could not be loaded. Error:' + request.statusText));
+                    }
+                }
+
+                request.onerror = function(){
+                    reject(Error('Oops!, there was a network error.'));
+                }
+
+                request.send();
+            });
+        }
+
+    </script>
+
+    <ul>
+
+    </ul>
+
+    <table>
+        <caption>Employee Information</caption>
+        <thead>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>Email</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script>
+        let ul = document.querySelector('ul');
+        
+        loadApi('https://utn-lubnan-api-1.herokuapp.com/api/Company')
+        .then((response) => {
+            
+            for (let comp of response) {
+                let li = document.createElement('li');
+                li.innerText = comp.name;
+                ul.append(li);
+            }
+        })
+        .catch((reason)=> {
+            console.log(Error(reason));
+        })
+
+        let tbody = document.querySelector('tbody');
+
+        loadApi('https://utn-lubnan-api-1.herokuapp.com/api/Employee')
+        .then((response)=> {
+            for(let emp of response) {
+                let tr = document.createElement('tr');
+                let td1 = document.createElement('td');
+                let td2 = document.createElement('td');
+                let td3 = document.createElement('td');
+
+                td1.innerText = emp.firstName;
+                td2.innerText = emp.lastName;
+                td3.innerText = emp.email;
+
+                tr.append(td1);
+                tr.append(td2);
+                tr.append(td3);
+
+                tbody.append(tr);
+            }
+        })
+        .catch((reason)=>{
+            console.log(Error(reason));
+        }
+        )
+    </script>
+</body>
+</html>
