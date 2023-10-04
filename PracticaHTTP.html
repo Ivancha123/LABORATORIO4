@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function loadApi(url){
+            return new Promise(function(resolve,reject){
+                var request = new XMLHttpRequest();
+                request.open('GET',url)
+                request.responseType = 'json';
+                request.onload = function (){
+                    if(request.status == 200){
+                        resolve(request.response);
+                    }
+                    else{
+                        reject(Error('Json could not be loaded. Error:' + request.statusText));
+                    }
+                }
+
+                request.onerror = function(){
+                    reject(Error('Oops!, there was a network error.'));
+                }
+
+                request.send();
+            });
+        }
+
+        function postApi(url, data){
+            return new Promise(function(resolve,reject){
+                var request = new XMLHttpRequest();
+                request.open('POST',url)
+                request.setRequestHeader("Content-Type", "application/json");
+                request.onload = function (){
+                    if(request.status == 200){
+                        resolve(request.response);
+                    }
+                    else{
+                        reject(Error('Json could not be loaded. Error:' + request.statusText));
+                    }
+                }
+
+                request.onerror = function(){
+                    reject(Error('Oops!, there was a network error.'));
+                }
+                request.send(data);
+            });
+        }
+
+        function modifyApi(url, data){
+            return new Promise(function(resolve,reject){
+                var request = new XMLHttpRequest();
+                request.open('PUT',url)
+                request.setRequestHeader("Content-Type", "application/json");
+                request.onload = function (){
+                    if(request.status == 200){
+                        resolve(request.response);
+                    }
+                    else{
+                        reject(Error('Json could not be loaded. Error:' + request.statusText));
+                    }
+                }
+
+                request.onerror = function(){
+                    reject(Error('Oops!, there was a network error.'));
+                }
+                request.send(data);
+            });
+        }
+
+        function removeApi(url, id){
+            return new Promise(function(resolve,reject){
+                var request = new XMLHttpRequest();
+                request.open('DELETE',url)
+                request.onload = function (){
+                    if(request.status == 200){
+                        resolve(request.response);
+                    }
+                    else{
+                        reject(Error('Json could not be loaded. Error:' + request.statusText));
+                    }
+                }
+
+                request.onerror = function(){
+                    reject(Error('Oops!, there was a network error.'));
+                }
+                request.send(id);
+            })
+        }
+    </script>
+
+    <table>
+        <caption>User List</caption>
+        <thead>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Website</th>
+            <th>Company</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <script>
+        let tbody = document.querySelector('tbody');
+        
+            loadApi('https://jsonplaceholder.typicode.com/users')
+        .then((response) => {
+            
+            for (let user of response) {
+                let tr = document.createElement('tr');
+                let td1 = document.createElement('td');
+                let td2 = document.createElement('td');
+                let td3 = document.createElement('td');
+                let td4 = document.createElement('td');
+                let td5 = document.createElement('td');
+                let td6 = document.createElement('td');
+                let td7 = document.createElement('td');
+                let td8 = document.createElement('td');
+
+                td1.innerText = user.id;
+                td2.innerText = user.name;
+                td3.innerText = user.username;
+                td4.innerText = user.email;
+
+                let ulAddress = document.createElement('ul');
+                let li1Address = document.createElement('li');
+                let li2Address = document.createElement('li');
+                let li3Address = document.createElement('li');
+                let li4Address = document.createElement('li');
+                let li5Address = document.createElement('li');
+
+                let olGeo = document.createElement('ol');
+                let li1Geo = document.createElement('li');
+                let li2Geo = document.createElement('li');
+
+                li1Address.innerText = user.address.street;
+                li2Address.innerText = user.address.suite;
+                li3Address.innerText = user.address.city;
+                li4Address.innerText = user.address.zipcode;
+                
+                li1Geo.innerText = user.address.geo.lat;
+                li2Geo.innerText = user.address.geo.lng;
+
+                olGeo.append(li1Geo);
+                olGeo.append(li2Geo);
+
+                li5Address.append(olGeo);
+
+                ulAddress.append(li1Address);
+                ulAddress.append(li2Address);
+                ulAddress.append(li3Address);
+                ulAddress.append(li4Address);
+                ulAddress.append(li5Address);
+
+                td5.append(ulAddress);
+                
+                td6.innerText = user.phone;
+                td7.innerText = user.website;
+
+                let ulCompany = document.createElement('ul');
+                let li1Company = document.createElement('li');
+                let li2Company = document.createElement('li');
+                let li3Company = document.createElement('li');
+
+                li1Company = user.company.name;
+                li2Company = user.company.catchPhrase;
+                li3Company = user.company.bs;
+
+                ulCompany.append(li1Company);
+                ulCompany.append(li2Company);
+                ulCompany.append(li3Company);
+
+                td8.append(ulCompany);
+
+                tr.append(td1);
+                tr.append(td2);
+                tr.append(td3);
+                tr.append(td4);
+                tr.append(td5);
+                tr.append(td6);
+                tr.append(td7);
+                tr.append(td8);
+
+                tbody.append(tr);
+            }
+        })
+        .catch((reason)=> {
+            console.log(Error(reason));
+        })
+
+        /*var dataPost = JSON.stringify({
+        "id": 11,
+        "name": "Ivan Metrailler",
+        "username": "Ivanchis",
+        "email": "ivanmetrailler123@gmail",
+        "address": {
+            "street": "Garay",
+            "suite": "Sheraton 400",
+            "city": "Mar del Plata",
+            "zipcode": "82998-3874",
+            "geo": {
+                "lat": "-47.3159",
+                "lng": "91.1496"
+            }
+        },
+        "phone": "2234019324",
+        "website": "placamadre.site",
+        "company": {
+            "name": "McDonalds",
+            "catchPhrase": "Parapapapam",
+            "bs": "fast-food"
+        }
+        });
+
+        postApi('https://jsonplaceholder.typicode.com/users', dataPost);
+
+        var dataModify = JSON.stringify({
+            "id": 1,
+            "name": "Ivan Metrailler"
+        });
+
+        modifyApi('https://jsonplaceholder.typicode.com/users',dataModify)*/
+
+        removeApi('https://jsonplaceholder.typicode.com/users',1);
+
+    </script>
+
+    
+</body>
+</html>
